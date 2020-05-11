@@ -1,0 +1,100 @@
+/* Post Feed */
+
+.post-feed
+  display: flex
+  flex-wrap: wrap
+
+.post-card
+  position: relative
+  flex: 1 1 50%
+  display: flex
+  position: relative
+  height: 35vw
+  background-size: cover
+  overflow: hidden
+  counter-increment: posts
+
+  &-large
+    flex: 1 1 100%
+
+  &.with-image .post-card-content
+    opacity: 0
+
+  &-link
+    flex: 1 1 auto
+    display: block
+    &:hover .post-card-content
+      opacity: 1
+      transition: opacity 0.3s cubic-bezier(0.33, 0, 0.2, 1)
+
+  &-content
+    flex: 1 1 auto
+    display: flex
+    align-items: center
+    justify-content: center
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    opacity: 1
+    transition: opacity 0.5s cubic-bezier(0.33, 0, 0.2, 1)
+
+  &-title
+    margin: 0
+    padding: 0 1rem
+    display: inline-block
+    font-size: 3.4rem
+    max-width: 70%
+    text-align: center
+    transition: all 0.3s cubic-bezier(0.33, 0, 0.2, 1)
+
+  &-date
+    display: block
+    margin-top: 1rem
+    max-width: 70%
+    text-align: center
+
+@media (max-width: 700px)
+  .post-card
+    flex: 1 1 100%
+    height: 70vw
+    &.with-image .post-card-content
+      opacity: 1
+
+/* Posts without images
+
+.post-card.no-image
+  &:before
+    display: block
+    content: counter(posts)
+    position: absolute
+    bottom: -0.15em
+    right: 5vw
+    font-size: 28vw
+    line-height: 1em
+    font-weight: $font-bold
+    letter-spacing: -0.1em
+  .post-card
+    &-content
+      justify-content: flex-start
+      align-items: flex-start
+      padding: 4vw
+    &-title
+      font-size: 5rem
+      line-height: 1.15em
+      text-align: left
+    &-date
+      text-align: left
+      padding: 0 1rem
+      max-width: 200px
+  &:hover .post-card-title
+    text-decoration: underline
+
+@media (max-width: 1200px)
+  .post-card.no-image .post-card-title
+    font-size: 3.4rem
+
+@media (max-width: 700px)
+  .post-card.no-image:before
+    font-size: 50vw

@@ -4,7 +4,7 @@ published: true
 schemaType: ContactPage
 pageSlug: /contact
 pageTitle: Contact
-metaDescription: Fill out the form to get in touch with {{client_name}}
+metaDescription: 'Fill out the form to get in touch with {{client_name}}'
 header: Contact
 subheader: Fill out the form and I will be in touch shortly.
 featuredImage:

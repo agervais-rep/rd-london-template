@@ -4,7 +4,7 @@ published: false
 name: '{{client_name}}'
 jobTitle: '{{job_title}}'
 siteName: '{{site_name}}'
-siteUrl: '{{site_url}}'
+siteUrl: 'https://{{site_url}}'
 socialLinks:
   twitter:
     url: ''

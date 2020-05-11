@@ -6,6 +6,72 @@ const { createFilePath } = require('gatsby-source-filesystem')
 const { fmImagesToRelative } = require('gatsby-remark-relative-images')
 const { transformFrontmatterMD } = require('./utils')
 
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions
+  const typeDefs = `
+    type MarkdownRemark implements Node {
+      frontmatter: Frontmatter
+    }
+    type Frontmatter @dontInfer {
+      templateKey: String!
+      published: Boolean
+      schemaType: String!
+      pageSlug: String
+      pageTitle: String!
+      metaDescription: String!
+      header: String!
+      subheader: String
+      date: Date @dateformat(formatString: "MMM D, YYYY")
+      featuredImage: FeaturedImage
+      missionStatement: String
+      shortBiography: String
+      longBiography_MD: String
+      formText: FormText
+      menuItems: [MenuItems]
+      name: String
+      jobTitle: String
+      siteName: String
+      siteUrl: String
+      socialLinks: SocialLinks
+      favicon: File @fileByRelativePath
+      fallbackImage: File @fileByRelativePath
+      themeOptions: ThemeOptions
+    }
+    type FeaturedImage {
+      src: File @fileByRelativePath
+      alt: String
+      caption: String
+    }
+    type FormText {
+      name: String!
+      email: String!
+      message: String!
+      submit: String!
+    }
+    type MenuItems {
+      slug: String!
+      label: String!
+    }
+    type SocialLinks {
+      twitter: SocialLink
+      facebook: SocialLink
+      linkedin: SocialLink
+      pinterest: SocialLink
+      instagram: SocialLink
+    }
+    type SocialLink {
+      url: String
+      show: Boolean
+    }
+    type ThemeOptions {
+      colorScheme: String!
+      fontScheme: String!
+      showThemeSwitcher: Boolean
+    }
+  `
+  createTypes(typeDefs)
+}
+
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
 

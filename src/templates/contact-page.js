@@ -133,7 +133,7 @@ export const ContactPageTemplate = ({
               required={true}
               rows={4}
             />
-            <input
+            {/* <input
               type="checkbox"
               name="checkbox"
               onChange={handleChange}
@@ -142,7 +142,7 @@ export const ContactPageTemplate = ({
             />
             <label htmlFor="checkbox" className="checkbox">
               Here's a checkbox!
-            </label>
+            </label> */}
             <button className={btnClasses} type="submit">
               {btnText}
             </button>

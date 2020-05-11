@@ -80,7 +80,7 @@ const Nav = ({ toggleNav, setToggleNav, siteName }) => {
       <div className="site-head-right">
         <div className="social-links">
           {!!socialLinks &&
-            socialLinks.length &&
+            !!socialLinks.length &&
             socialLinks.map(social => (
               <SocialLink
                 slug={Object.values(social)[0].url}

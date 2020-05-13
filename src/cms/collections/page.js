@@ -62,6 +62,7 @@ export default ({ label, file, templateKey, pageSlug, additionalFields }) => {
       label: 'Extra Content',
       name: 'body',
       widget: 'markdown',
+      required: false,
       hint:
         'Any additional content you want to place at the bottom of the page.',
     },

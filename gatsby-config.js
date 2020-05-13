@@ -108,6 +108,7 @@ module.exports = {
       resolve: 'gatsby-transformer-remark',
       options: {
         plugins: [
+          'gatsby-remark-embed-video',
           {
             resolve: 'gatsby-remark-relative-images',
             options: {

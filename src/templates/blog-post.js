@@ -20,7 +20,7 @@ export const BlogPostTemplate = ({
 
   return (
     <article
-      className={`post-content page-template ${
+      className={`post-content post-template ${
         hasImg ? 'with-image' : 'no-image'
       }`}
       style={{ padding: 0 }}

@@ -11,6 +11,7 @@ const socialLink = label => ({
       widget: 'string',
       hint: `The URL of your ${label} page, if you have one. Must start with "https://".`,
       pattern: ['https://.+', 'Must start with "https://"."'],
+      required: false,
     },
     {
       label: 'Show in social menu',

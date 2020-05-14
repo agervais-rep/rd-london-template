@@ -25,6 +25,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       featuredImage: FeaturedImage
       missionStatement: String
       shortBiography: String
+      showRecentPosts: Boolean
       longBiography_MD: String
       formText: FormText
       menuItems: [MenuItems]

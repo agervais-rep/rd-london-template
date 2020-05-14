@@ -13,4 +13,5 @@ featuredImage:
   alt: 'Headshot of {{client_name}}'
   caption: ~
 shortBiography: '{{short_bio}}'
+showRecentPosts: true
 ---

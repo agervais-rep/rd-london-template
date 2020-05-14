@@ -15,7 +15,7 @@ const pages = [
     file: 'src/pages/index.md',
     templateKey: 'index-page',
     pageSlug: '/',
-    additionalFields: ['missionStatement', 'shortBiography', 'extraContent'],
+    additionalFields: ['missionStatement', 'shortBiography', 'extraContent', 'showRecentPosts'],
   },
   {
     label: 'About Page',

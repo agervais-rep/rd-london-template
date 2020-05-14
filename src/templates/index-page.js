@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import { graphql, Link } from 'gatsby'
-import { Layout, PreviewableImage, ExtraContent } from '../components'
+import { Layout, PreviewableImage, ExtraContent, PostFeed } from '../components'
 import { featuredImagePropTypes } from '../proptypes'
+import { useRecentPosts } from '../hooks'
 
 export const IndexPageTemplate = ({
   header,
@@ -12,6 +13,7 @@ export const IndexPageTemplate = ({
   featuredImage: { src, alt, caption },
   extraContent,
   isPreview,
+  recentPosts,
 }) => (
   <div
     className="post-content page-template no-image"
@@ -44,6 +46,13 @@ export const IndexPageTemplate = ({
           </figure>
         </div>
       </div>
+      {!!recentPosts && !!recentPosts.length && (
+        <Fragment>
+          <hr />
+          <h3>Recent Blog Posts</h3>
+          <PostFeed isPreview={isPreview} posts={recentPosts} />
+        </Fragment>
+      )}
       {!!extraContent && (
         <ExtraContent content={extraContent} page={'index-page'} />
       )}
@@ -62,8 +71,10 @@ const IndexPage = ({ data }) => {
     missionStatement,
     shortBiography,
     featuredImage,
+    showRecentPosts
   } = data.markdownRemark.frontmatter
   const { slug, gitAuthorTime, gitCreatedTime } = data.markdownRemark.fields
+  const recentPosts = useRecentPosts()
 
   const pageProps = {
     header,
@@ -72,6 +83,7 @@ const IndexPage = ({ data }) => {
     shortBiography,
     featuredImage,
     extraContent: data.markdownRemark.html,
+    recentPosts: showRecentPosts ? recentPosts : []
   }
 
   const layoutProps = {
@@ -100,6 +112,7 @@ IndexPageTemplate.propTypes = {
   featuredImage: featuredImagePropTypes,
   extraContent: PropTypes.string,
   isPreview: PropTypes.bool,
+  recentPosts: PropTypes.array
 }
 
 export default IndexPage
@@ -122,6 +135,7 @@ export const pageQuery = graphql`
         subheader
         shortBiography
         missionStatement
+        showRecentPosts
         featuredImage {
           src {
             childImageSharp {

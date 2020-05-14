@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
-import { Layout, PostCard, PreviewableImage } from '../components'
+import { Layout, PreviewableImage, PostFeed } from '../components'
 import { featuredImagePropTypes, postsPropTypes } from '../proptypes'
 
 export const BlogArchiveTemplate = ({
@@ -34,35 +33,7 @@ export const BlogArchiveTemplate = ({
         </figure>
       </section>
     </div>
-    <div className="post-feed">
-      {!isPreview &&
-        !!posts &&
-        !!posts.length &&
-        posts.map(({ image, slug, pageTitle, date }, index) => {
-          return (
-            <PostCard
-              key={uuidv4()}
-              count={index}
-              image={image}
-              slug={slug}
-              pageTitle={pageTitle}
-              date={date}
-            />
-          )
-        })}
-      {!isPreview && (!posts || !posts.length) && (
-        <PostCard
-          count={0}
-          pageTitle="No posts yet. Please check back again soon!"
-        />
-      )}
-      {!!isPreview && (
-        <PostCard
-          count={0}
-          pageTitle="Your posts will appear here in reverse chronological order"
-        />
-      )}
-    </div>
+    <PostFeed isPreview={isPreview} posts={posts} />
   </Fragment>
 )
 

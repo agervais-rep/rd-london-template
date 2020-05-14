@@ -36,6 +36,7 @@ const PagePreview = ({ entry, getAsset, widgetFor }) => {
           featuredImage={featuredImage}
           extraContent={extraContent}
           isPreview={true}
+          recentPosts={[]}
         />
       )}
       {templateKey === 'about-page' && (

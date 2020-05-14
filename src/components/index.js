@@ -4,5 +4,6 @@ import PostCard from './PostCard'
 import PreviewableImage from './PreviewableImage'
 import ThemeSwitcher from './ThemeSwitcher'
 import ExtraContent from './ExtraContent'
+import PostFeed from './PostFeed'
 
-export { Layout, Nav, PostCard, PreviewableImage, ThemeSwitcher, ExtraContent }
+export { Layout, Nav, PostCard, PreviewableImage, ThemeSwitcher, ExtraContent, PostFeed }

@@ -66,6 +66,12 @@ export default ({ label, file, templateKey, pageSlug, additionalFields }) => {
       hint:
         'Any additional content you want to place at the bottom of the page.',
     },
+    showRecentPosts: {
+      label: 'Show the 4 most recent blog posts at the bottom of the page?',
+      name: 'showRecentPosts',
+      widget: 'boolean',
+      default: false,
+    },
   }
 
   const others = !additionalFields

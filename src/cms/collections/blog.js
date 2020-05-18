@@ -35,6 +35,7 @@ export default {
       label: 'Teaser Text',
       name: 'teaser',
       widget: 'text',
+      required: false,
       hint:
         'If your theme shows a short preview of each article on the blog page, you can optionally customize the text here. Write 2-3 sentences max.',
     },

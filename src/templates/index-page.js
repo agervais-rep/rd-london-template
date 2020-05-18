@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { graphql, Link } from 'gatsby'
 import { Layout, PreviewableImage, ExtraContent, PostFeed } from '../components'
@@ -71,7 +71,7 @@ const IndexPage = ({ data }) => {
     missionStatement,
     shortBiography,
     featuredImage,
-    showRecentPosts
+    showRecentPosts,
   } = data.markdownRemark.frontmatter
   const { slug, gitAuthorTime, gitCreatedTime } = data.markdownRemark.fields
   const recentPosts = useRecentPosts()
@@ -83,7 +83,7 @@ const IndexPage = ({ data }) => {
     shortBiography,
     featuredImage,
     extraContent: data.markdownRemark.html,
-    recentPosts: showRecentPosts ? recentPosts : []
+    recentPosts: showRecentPosts ? recentPosts : [],
   }
 
   const layoutProps = {
@@ -112,7 +112,7 @@ IndexPageTemplate.propTypes = {
   featuredImage: featuredImagePropTypes,
   extraContent: PropTypes.string,
   isPreview: PropTypes.bool,
-  recentPosts: PropTypes.array
+  recentPosts: PropTypes.array,
 }
 
 export default IndexPage

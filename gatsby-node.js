@@ -80,7 +80,6 @@ exports.createPages = ({ graphql, actions }) => {
   return graphql(`
     {
       allMarkdownRemark(
-        limit: 1000
         filter: {
           frontmatter: {
             templateKey: { nin: ["site-data", "menu-data"] }

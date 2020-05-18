@@ -4,4 +4,10 @@ import useStructuredData from './useStructuredData'
 import useSiteMeta from './useSiteMeta'
 import useRecentPosts from './useRecentPosts'
 
-export { useNavPages, useSiteData, useStructuredData, useSiteMeta, useRecentPosts }
+export {
+  useNavPages,
+  useSiteData,
+  useStructuredData,
+  useSiteMeta,
+  useRecentPosts,
+}

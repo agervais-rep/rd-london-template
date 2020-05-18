@@ -49,7 +49,10 @@ const BlogArchive = ({ data }) => {
   } = data.markdownRemark.frontmatter
   const { slug, gitAuthorTime, gitCreatedTime } = data.markdownRemark.fields
   const posts = data.allMarkdownRemark.edges.map(({ node }) => ({
-    image: node.frontmatter.featuredImage.src,
+    image:
+      !!node.frontmatter.featuredImage && !!node.frontmatter.featuredImage.src
+        ? node.frontmatter.featuredImage.src
+        : null,
     slug: node.fields.slug,
     pageTitle: node.frontmatter.pageTitle,
     date: node.frontmatter.date,
@@ -122,7 +125,12 @@ export const pageQuery = graphql`
     }
     allMarkdownRemark(
       sort: { order: DESC, fields: [frontmatter___date] }
-      filter: { frontmatter: { templateKey: { eq: "blog-post" } } }
+      filter: {
+        frontmatter: {
+          templateKey: { eq: "blog-post" }
+          published: { eq: true }
+        }
+      }
     ) {
       edges {
         node {

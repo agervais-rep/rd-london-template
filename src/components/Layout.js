@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 import PropTypes from 'prop-types'
 import Nav from './Nav'
 import { Link } from 'gatsby'
+import { isMobile } from 'react-device-detect'
 import { useSiteData, useStructuredData, useSiteMeta } from '../hooks'
 import { featuredImagePropTypes } from '../proptypes'
 import ThemeSwitcher from './ThemeSwitcher'
@@ -21,6 +22,7 @@ const Layout = ({
   schemaType,
   children,
 }) => {
+  const isSSR = typeof window === 'undefined'
   const [toggleNav, setToggleNav] = useState(false)
   const {
     name,
@@ -90,10 +92,18 @@ const Layout = ({
       : fontOptions[0].styles
   }
 
+  const htmlClasses = [
+    colorScheme,
+    fontScheme,
+    !isSSR && isMobile ? 'no-mouse' : '',
+  ]
+    .filter(item => item)
+    .join(' ')
+
   return (
     <Fragment>
       <Helmet bodyAttributes={{ class: 'frontend' }}>
-        <html lang="en" className={`${colorScheme} ${fontScheme}`} />
+        <html lang="en" className={htmlClasses} />
         <title>{pageTitle}</title>
         <link
           rel="stylesheet"

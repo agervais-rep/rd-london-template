@@ -14,4 +14,7 @@ featuredImage:
   caption: ~
 shortBiography: '{{short_bio}}'
 showRecentPosts: false
+learnMoreButton:
+  link: /about/
+  label: Read More
 ---

@@ -4,6 +4,7 @@ import { graphql, Link } from 'gatsby'
 import { Layout, PreviewableImage, ExtraContent, PostFeed } from '../components'
 import { featuredImagePropTypes } from '../proptypes'
 import { useRecentPosts } from '../hooks'
+import { seoProps, addTrailingSlash } from '../utils'
 
 export const IndexPageTemplate = ({
   header,
@@ -14,6 +15,8 @@ export const IndexPageTemplate = ({
   extraContent,
   isPreview,
   recentPosts,
+  learnMoreButton: { link: learnLink, label: learnLabel },
+  inlineImages,
 }) => (
   <div
     className="post-content page-template no-image"
@@ -31,8 +34,8 @@ export const IndexPageTemplate = ({
       <div className="row" style={{ alignItems: 'center' }}>
         <div className="col-6">
           <p>{shortBiography}</p>
-          <Link className="button" to="/about">
-            Learn More
+          <Link className="button" to={addTrailingSlash(learnLink)}>
+            {learnLabel}
           </Link>
         </div>
         <div className="col-6">
@@ -49,12 +52,16 @@ export const IndexPageTemplate = ({
       {!!recentPosts && !!recentPosts.length && (
         <Fragment>
           <hr />
-          <h3>Recent Blog Posts</h3>
+          <h2>Recent Blog Posts</h2>
           <PostFeed isPreview={isPreview} posts={recentPosts} />
         </Fragment>
       )}
       {!!extraContent && (
-        <ExtraContent content={extraContent} page={'index-page'} />
+        <ExtraContent
+          content={extraContent}
+          page={'index-page'}
+          inlineImages={inlineImages}
+        />
       )}
     </section>
   </div>
@@ -62,20 +69,18 @@ export const IndexPageTemplate = ({
 
 const IndexPage = ({ data }) => {
   const {
-    templateKey,
-    pageTitle,
-    metaDescription,
-    schemaType,
-    header,
-    subheader,
-    missionStatement,
-    shortBiography,
-    featuredImage,
-    showRecentPosts,
-  } = data.markdownRemark.frontmatter
-  const { slug, gitAuthorTime, gitCreatedTime } = data.markdownRemark.fields
+    frontmatter: {
+      header,
+      subheader,
+      missionStatement,
+      shortBiography,
+      featuredImage,
+      showRecentPosts,
+      learnMoreButton,
+    },
+    fields: { inlineImages },
+  } = data.markdownRemark
   const recentPosts = useRecentPosts()
-
   const pageProps = {
     header,
     subheader,
@@ -84,21 +89,15 @@ const IndexPage = ({ data }) => {
     featuredImage,
     extraContent: data.markdownRemark.html,
     recentPosts: showRecentPosts ? recentPosts : [],
-  }
-
-  const layoutProps = {
-    pageTitle,
-    metaDescription,
-    slug,
-    templateKey,
-    schemaType,
-    featuredImage,
-    gitAuthorTime,
-    gitCreatedTime,
+    inlineImages,
+    learnMoreButton:
+      learnMoreButton && learnMoreButton.link && learnMoreButton.label
+        ? learnMoreButton
+        : { link: '/about/', label: 'Read More' },
   }
 
   return (
-    <Layout {...layoutProps}>
+    <Layout seoProps={seoProps(data)}>
       <IndexPageTemplate {...pageProps} />
     </Layout>
   )
@@ -111,8 +110,13 @@ IndexPageTemplate.propTypes = {
   shortBiography: PropTypes.string,
   featuredImage: featuredImagePropTypes,
   extraContent: PropTypes.string,
+  learnMoreButton: PropTypes.shape({
+    link: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  }),
   isPreview: PropTypes.bool,
   recentPosts: PropTypes.array,
+  inlineImages: PropTypes.array,
 }
 
 export default IndexPage
@@ -124,6 +128,16 @@ export const pageQuery = graphql`
         slug
         gitAuthorTime
         gitCreatedTime
+        inlineImages {
+          childImageSharp {
+            fluid(maxWidth: 1000, quality: 80, cropFocus: CENTER) {
+              ...GatsbyImageSharpFluid_withWebp
+              originalName
+              presentationWidth
+              presentationHeight
+            }
+          }
+        }
       }
       html
       frontmatter {
@@ -136,16 +150,25 @@ export const pageQuery = graphql`
         shortBiography
         missionStatement
         showRecentPosts
+        learnMoreButton {
+          link
+          label
+        }
         featuredImage {
           src {
             childImageSharp {
               fluid(
                 maxWidth: 420
                 maxHeight: 360
-                quality: 100
+                quality: 80
                 cropFocus: CENTER
               ) {
                 ...GatsbyImageSharpFluid_withWebp
+                originalName
+              }
+              original {
+                height
+                width
               }
             }
           }

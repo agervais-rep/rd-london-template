@@ -1,18 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
-import { Layout, PreviewableImage, ExtraContent } from '../components'
+import {
+  Layout,
+  PreviewableImage,
+  ExtraContent,
+  HTMLContent,
+} from '../components'
 import { featuredImagePropTypes } from '../proptypes'
+import { seoProps } from '../utils'
 
 export const AboutPageTemplate = ({
   header,
   subheader,
   longBiography_MD,
-  featuredImage: { src, alt, caption },
+  featuredImage: { src, m, d, alt, caption },
   extraContent,
   isPreview,
+  inlineImages,
 }) => (
-  <div className="post-content page-template no-image" style={{ padding: 0 }}>
+  <div
+    className={`post-content page-template ${
+      !!src || (!!m && !!d) ? 'has-image' : 'no-image'
+    }`}
+    style={{ padding: 0 }}
+  >
     <header className="page-head">
       <h1 className="page-head-title">{header}</h1>
       {!!subheader && <p className="page-head-description">{subheader}</p>}
@@ -21,17 +33,22 @@ export const AboutPageTemplate = ({
       <figure className="gatsby-resp-image-card-full">
         <PreviewableImage
           isPreview={isPreview}
-          src={src}
+          src={isPreview ? src : { m, d }}
           alt={alt}
           caption={caption}
         />
       </figure>
-      <div
+      <HTMLContent
         className="gatsby-resp-image-card"
-        dangerouslySetInnerHTML={{ __html: longBiography_MD }}
+        content={longBiography_MD}
+        inlineImages={inlineImages}
       />
       {!!extraContent && (
-        <ExtraContent content={extraContent} page={'index-page'} />
+        <ExtraContent
+          content={extraContent}
+          page={'index-page'}
+          inlineImages={inlineImages}
+        />
       )}
     </section>
   </div>
@@ -39,38 +56,23 @@ export const AboutPageTemplate = ({
 
 const AboutPage = ({ data }) => {
   const {
-    templateKey,
-    pageTitle,
-    metaDescription,
-    schemaType,
     header,
     subheader,
     longBiography_MD,
     featuredImage,
   } = data.markdownRemark.frontmatter
-  const { slug, gitAuthorTime, gitCreatedTime } = data.markdownRemark.fields
-
+  const { inlineImages } = data.markdownRemark.fields
   const pageProps = {
     header,
     subheader,
     longBiography_MD,
     featuredImage,
     extraContent: data.markdownRemark.html,
-  }
-
-  const layoutProps = {
-    pageTitle,
-    metaDescription,
-    slug,
-    templateKey,
-    schemaType,
-    featuredImage,
-    gitAuthorTime,
-    gitCreatedTime,
+    inlineImages,
   }
 
   return (
-    <Layout {...layoutProps}>
+    <Layout seoProps={seoProps(data)}>
       <AboutPageTemplate {...pageProps} />
     </Layout>
   )
@@ -83,6 +85,7 @@ AboutPageTemplate.propTypes = {
   featuredImage: featuredImagePropTypes,
   extraContent: PropTypes.string,
   isPreview: PropTypes.bool,
+  inlineImages: PropTypes.array,
 }
 
 export default AboutPage
@@ -94,6 +97,16 @@ export const pageQuery = graphql`
         slug
         gitAuthorTime
         gitCreatedTime
+        inlineImages {
+          childImageSharp {
+            fluid(maxWidth: 1000, quality: 80, cropFocus: CENTER) {
+              ...GatsbyImageSharpFluid_withWebp
+              originalName
+              presentationWidth
+              presentationHeight
+            }
+          }
+        }
       }
       html
       frontmatter {
@@ -107,7 +120,35 @@ export const pageQuery = graphql`
         featuredImage {
           src {
             childImageSharp {
-              fluid(maxWidth: 1200, quality: 100) {
+              fluid {
+                originalName
+              }
+              original {
+                height
+                width
+              }
+            }
+          }
+          d: src {
+            childImageSharp {
+              fluid(
+                maxWidth: 1200
+                maxHeight: 450
+                quality: 80
+                cropFocus: CENTER
+              ) {
+                ...GatsbyImageSharpFluid_withWebp
+              }
+            }
+          }
+          m: src {
+            childImageSharp {
+              fluid(
+                maxWidth: 900
+                maxHeight: 506
+                quality: 80
+                cropFocus: CENTER
+              ) {
                 ...GatsbyImageSharpFluid_withWebp
               }
             }

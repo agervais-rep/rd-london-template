@@ -58,6 +58,27 @@ export default ({ label, file, templateKey, pageSlug, additionalFields }) => {
         },
       ],
     },
+    learnMoreButton: {
+      label: 'Learn More Button',
+      name: 'learnMoreButton',
+      widget: 'object',
+      required: true,
+      hint: 'The text and link for the button on the home page',
+      fields: [
+        {
+          label: 'Button Text',
+          name: 'label',
+          widget: 'string',
+          required: true,
+        },
+        {
+          label: 'Button Link',
+          name: 'link',
+          widget: 'string',
+          required: true,
+        },
+      ],
+    },
     extraContent: {
       label: 'Extra Content',
       name: 'body',
@@ -76,7 +97,7 @@ export default ({ label, file, templateKey, pageSlug, additionalFields }) => {
 
   const others = !additionalFields
     ? []
-    : additionalFields.map(name => optionalFields[name])
+    : additionalFields.map((name) => optionalFields[name])
 
   return {
     file,

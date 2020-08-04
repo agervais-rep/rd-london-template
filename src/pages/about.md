@@ -8,7 +8,7 @@ metaDescription: 'Biography of {{client_name}}, {{job_title}}'
 header: 'About {{client_name}}'
 subheader: Career highlights past and present
 featuredImage:
-  src: /img/headshot.jpg
+  src: /img/about.jpg
   alt: 'Headshot of {{client_name}}'
   caption: ~
 longBiography_MD: |

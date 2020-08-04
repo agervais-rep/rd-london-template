@@ -18,6 +18,7 @@ const pages = [
     additionalFields: [
       'missionStatement',
       'shortBiography',
+      'learnMoreButton',
       'extraContent',
       'showRecentPosts',
     ],
@@ -64,7 +65,7 @@ CMS.init({
       {
         name: 'pages',
         label: 'Pages',
-        files: pages.map(data => page(data)),
+        files: pages.map((data) => page(data)),
       },
       blog,
     ],

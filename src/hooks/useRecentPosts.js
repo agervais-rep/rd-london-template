@@ -1,4 +1,5 @@
 import { useStaticQuery, graphql } from 'gatsby'
+import { getValidDates } from '../utils'
 
 export default () => {
   const data = useStaticQuery(
@@ -18,15 +19,45 @@ export default () => {
             node {
               fields {
                 slug
+                gitAuthorTime
+                gitCreatedTime
               }
               frontmatter {
-                date(formatString: "MMMM DD, YYYY")
+                date(formatString: "MMM D, YYYY")
                 pageTitle
                 featuredImage {
                   src {
                     childImageSharp {
-                      fluid(maxWidth: 1360) {
+                      fluid {
+                        originalName
+                      }
+                      original {
+                        height
+                        width
+                      }
+                    }
+                  }
+                  m: src {
+                    childImageSharp {
+                      fluid(maxWidth: 500, maxHeight: 664) {
                         ...GatsbyImageSharpFluid_withWebp
+                        originalName
+                      }
+                      original {
+                        height
+                        width
+                      }
+                    }
+                  }
+                  d: src {
+                    childImageSharp {
+                      fluid(maxWidth: 1000, maxHeight: 664) {
+                        ...GatsbyImageSharpFluid_withWebp
+                        originalName
+                      }
+                      original {
+                        height
+                        width
                       }
                     }
                   }
@@ -37,7 +68,7 @@ export default () => {
           }
         }
       }
-    `
+    `,
   )
   if (
     data &&
@@ -45,15 +76,24 @@ export default () => {
     data.allMarkdownRemark.edges &&
     data.allMarkdownRemark.edges.length > 0
   ) {
-    return data.allMarkdownRemark.edges.map(({ node }) => ({
-      image:
-        !!node.frontmatter.featuredImage && !!node.frontmatter.featuredImage.src
-          ? node.frontmatter.featuredImage.src
-          : null,
-      slug: node.fields.slug,
-      pageTitle: node.frontmatter.pageTitle,
-      date: node.frontmatter.date,
-    }))
+    return data.allMarkdownRemark.edges.map(({ node }) => {
+      const {
+        frontmatter: { featuredImage, pageTitle, date: userDate },
+        fields: { slug, gitAuthorTime, gitCreatedTime },
+      } = node
+      const { date, dateModified } = getValidDates(
+        userDate,
+        gitAuthorTime,
+        gitCreatedTime,
+      )
+      return {
+        image: !!featuredImage ? featuredImage : null,
+        slug,
+        pageTitle,
+        date,
+        dateModified,
+      }
+    })
   } else {
     return []
   }

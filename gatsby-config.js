@@ -72,6 +72,7 @@ module.exports = {
       },
     },
     'gatsby-plugin-catch-links',
+    'gatsby-plugin-loadable-components-ssr',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     {
@@ -95,7 +96,7 @@ module.exports = {
           return markdownRemark.frontmatter.siteUrl
         },
         serialize: ({ markdownRemark, allSitePage }) =>
-          allSitePage.nodes.map(node => {
+          allSitePage.nodes.map((node) => {
             return {
               url: `${markdownRemark.frontmatter.siteUrl}${node.path}`,
               changefreq: `daily`,
@@ -155,12 +156,42 @@ module.exports = {
       resolve: 'gatsby-plugin-purgecss', // purges all unused/unreferenced css rules
       options: {
         develop: false, // Activates purging in npm run develop
+        printRejected: true,
         purgeOnly: ['/style/all.sass'], // applies purging only on the bulma css file
         // content: [path.join(process.cwd(), 'src/**/!(*.d).{ts,js,jsx,tsx,md,mdx}')]
-        whitelistPatterns: [/^table$/, /^t(body|h|d|r)$/, /^blockquote$/],
-        // whitelistPatternsChildren: [],
+        whitelistPatterns: [
+          /^table$/,
+          /^t(body|h|d|r)$/,
+          /^blockquote$/,
+          /^gatsby-resp-image/,
+        ],
+        whitelistPatternsChildren: [/^gatsby-image-wrapper/, /^in-view$/],
       },
     }, // must be after other CSS plugins
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Website`,
+        short_name: `website`,
+        start_url: `/`,
+        background_color: `#ffffff`,
+        theme_color: `#131313`,
+        display: `standalone`,
+        icon: `static/img/favicon.png`, // This path is relative to the root of the site.
+        cache_busting_mode: 'none',
+        icon_options: {
+          purpose: `maskable`,
+        },
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-offline',
+      options: {
+        workboxConfig: {
+          globPatterns: ['**/img*'],
+        },
+      },
+    },
     {
       resolve: 'gatsby-plugin-netlify-cms',
       options: {

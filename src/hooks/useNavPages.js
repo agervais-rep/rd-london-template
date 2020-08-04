@@ -13,7 +13,19 @@ export default () => {
           }
         }
       }
-    `
+    `,
   )
-  return query.markdownRemark.frontmatter.menuItems
+  const { menuItems } = query.markdownRemark.frontmatter
+  return menuItems.map(({ slug: orginalSlug, label }) => {
+    // normalize to initial and trailing slash
+    const slug =
+      orginalSlug === '/'
+        ? orginalSlug
+        : `/${orginalSlug
+            .split('/')
+            .filter(x => x)
+            .join('/')}/`
+    return { slug, label }
+  })
+  // return query.markdownRemark.frontmatter.menuItems
 }

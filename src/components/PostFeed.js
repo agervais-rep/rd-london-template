@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import PostCard from './PostCard'
 import { v4 as uuidv4 } from 'uuid'
+import { addTrailingSlash } from '../utils'
 
 const PostFeed = ({ isPreview, posts }) => (
   <div className="post-feed">
@@ -14,7 +15,7 @@ const PostFeed = ({ isPreview, posts }) => (
             key={uuidv4()}
             count={index}
             image={image}
-            slug={slug}
+            slug={addTrailingSlash(slug)}
             pageTitle={pageTitle}
             date={date}
           />

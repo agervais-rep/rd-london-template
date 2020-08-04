@@ -4,13 +4,20 @@ const moment = require('moment-timezone')
 const { execSync } = require('child_process')
 const { createFilePath } = require('gatsby-source-filesystem')
 const { fmImagesToRelative } = require('gatsby-remark-relative-images')
-const { transformFrontmatterMD } = require('./utils')
+const { transformFrontmatterMD, extractInlineImages } = require('./utils')
 
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
   const typeDefs = `
     type MarkdownRemark implements Node {
       frontmatter: Frontmatter
+      fields: Fields
+    }
+    type Fields {
+      slug: String!
+      gitAuthorTime: Date
+      gitCreatedTime: Date
+      inlineImages: [File] @fileByRelativePath
     }
     type Frontmatter @dontInfer {
       templateKey: String!
@@ -27,6 +34,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       shortBiography: String
       showRecentPosts: Boolean
       longBiography_MD: String
+      learnMoreButton: LearnMoreButton
       formText: FormText
       menuItems: [MenuItems]
       name: String
@@ -37,6 +45,10 @@ exports.createSchemaCustomization = ({ actions }) => {
       favicon: File @fileByRelativePath
       fallbackImage: File @fileByRelativePath
       themeOptions: ThemeOptions
+    }
+    type LearnMoreButton {
+      label: String!
+      link: String!
     }
     type FeaturedImage {
       src: File @fileByRelativePath
@@ -100,21 +112,21 @@ exports.createPages = ({ graphql, actions }) => {
         }
       }
     }
-  `).then(result => {
+  `).then((result) => {
     if (result.errors) {
-      result.errors.forEach(e => console.error(e.toString()))
+      result.errors.forEach((e) => console.error(e.toString()))
       return Promise.reject(result.errors)
     }
     // Create pages
     const posts = result.data.allMarkdownRemark.edges
 
-    posts.forEach(edge => {
+    posts.forEach((edge) => {
       const id = edge.node.id
       createPage({
         path: edge.node.fields.slug,
         // tags: edge.node.frontmatter.tags,
         component: path.resolve(
-          `src/templates/${String(edge.node.frontmatter.templateKey)}.js`
+          `src/templates/${String(edge.node.frontmatter.templateKey)}.js`,
         ),
         // additional data can be passed via context
         context: {
@@ -132,33 +144,33 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   if (node.internal.type === `MarkdownRemark`) {
     const gitAuthorTime = execSync(
       // last commit to repo time
-      `git log -1 --pretty=format:%aI "${node.fileAbsolutePath}"`
+      `git log -1 --pretty=format:%aI "${node.fileAbsolutePath}"`,
     ).toString()
     const gitCreatedTime = execSync(
       // first commit to repo time
-      `git log --pretty=format:%at --follow -- "${node.fileAbsolutePath}" | tail -n 1`
+      `git log --pretty=format:%at --follow -- "${node.fileAbsolutePath}" | tail -n 1`,
     ).toString()
     createNodeField({
       node,
       name: 'gitAuthorTime',
-      value: moment(gitAuthorTime)
-        .tz('America/Los_Angeles')
-        .format(),
+      value: moment(gitAuthorTime).tz('America/Los_Angeles').format(),
     })
     createNodeField({
       node,
       name: 'gitCreatedTime',
-      value: moment
-        .unix(gitCreatedTime)
-        .tz('America/Los_Angeles')
-        .format(),
+      value: moment.unix(gitCreatedTime).tz('America/Los_Angeles').format(),
     })
     // generate slug
-    const value = createFilePath({ node, getNode })
     createNodeField({
       name: `slug`,
       node,
-      value,
+      value: createFilePath({ node, getNode }),
+    })
+    // get inline images for use in HTMLContent
+    createNodeField({
+      node,
+      name: 'inlineImages',
+      value: extractInlineImages(node),
     })
   }
 }

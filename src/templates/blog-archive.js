@@ -2,7 +2,9 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import { Layout, PreviewableImage, PostFeed } from '../components'
-import { featuredImagePropTypes, postsPropTypes } from '../proptypes'
+import { postPropTypes } from '../components/PostCard'
+import { featuredImagePropTypes } from '../proptypes'
+import { seoProps, getValidDates } from '../utils'
 
 export const BlogArchiveTemplate = ({
   header,
@@ -38,28 +40,20 @@ export const BlogArchiveTemplate = ({
 )
 
 const BlogArchive = ({ data }) => {
-  const {
-    templateKey,
-    pageTitle,
-    metaDescription,
-    schemaType,
-    header,
-    subheader,
-    featuredImage,
-  } = data.markdownRemark.frontmatter
-  const { slug, gitAuthorTime, gitCreatedTime } = data.markdownRemark.fields
-  const posts = data.allMarkdownRemark.edges.map(({ node }) => ({
-    image:
-      !!node.frontmatter.featuredImage && !!node.frontmatter.featuredImage.src
-        ? node.frontmatter.featuredImage.src
-        : null,
-    slug: node.fields.slug,
-    pageTitle: node.frontmatter.pageTitle,
-    date: node.frontmatter.date,
-  }))
-
-  // console.log(posts)
-
+  const { header, subheader, featuredImage } = data.markdownRemark.frontmatter
+  const posts = data.allMarkdownRemark.edges.map(({ node }) => {
+    const {
+      frontmatter: { featuredImage, pageTitle, date: userDate },
+      fields: { slug, gitAuthorTime, gitCreatedTime },
+    } = node
+    const { date } = getValidDates(userDate, gitAuthorTime, gitCreatedTime)
+    return {
+      image: !!featuredImage ? featuredImage : null,
+      slug,
+      pageTitle,
+      date,
+    }
+  })
   const pageProps = {
     header,
     subheader,
@@ -67,19 +61,8 @@ const BlogArchive = ({ data }) => {
     posts,
   }
 
-  const layoutProps = {
-    pageTitle,
-    metaDescription,
-    slug,
-    templateKey,
-    schemaType,
-    featuredImage,
-    gitAuthorTime,
-    gitCreatedTime,
-  }
-
   return (
-    <Layout {...layoutProps}>
+    <Layout seoProps={seoProps(data)}>
       <BlogArchiveTemplate {...pageProps} />
     </Layout>
   )
@@ -88,7 +71,7 @@ const BlogArchive = ({ data }) => {
 BlogArchiveTemplate.propTypes = {
   header: PropTypes.string.isRequired,
   subheader: PropTypes.string,
-  posts: PropTypes.arrayOf(PropTypes.shape(postsPropTypes)).isRequired,
+  posts: PropTypes.arrayOf(PropTypes.shape(postPropTypes)).isRequired,
   featuredImage: featuredImagePropTypes,
   isPreview: PropTypes.bool,
 }
@@ -113,7 +96,7 @@ export const pageQuery = graphql`
         featuredImage {
           src {
             childImageSharp {
-              fluid(maxWidth: 1200, quality: 100) {
+              fluid(maxWidth: 1200, quality: 80, cropFocus: CENTER) {
                 ...GatsbyImageSharpFluid_withWebp
               }
             }
@@ -136,15 +119,45 @@ export const pageQuery = graphql`
         node {
           fields {
             slug
+            gitAuthorTime
+            gitCreatedTime
           }
           frontmatter {
-            date(formatString: "MMMM DD, YYYY")
+            date(formatString: "MMM DD, YYYY")
             pageTitle
             featuredImage {
               src {
                 childImageSharp {
-                  fluid(maxWidth: 1360) {
+                  fluid {
+                    originalName
+                  }
+                  original {
+                    height
+                    width
+                  }
+                }
+              }
+              m: src {
+                childImageSharp {
+                  fluid(maxWidth: 500, maxHeight: 664, cropFocus: CENTER) {
                     ...GatsbyImageSharpFluid_withWebp
+                    originalName
+                  }
+                  original {
+                    height
+                    width
+                  }
+                }
+              }
+              d: src {
+                childImageSharp {
+                  fluid(maxWidth: 1000, maxHeight: 664, cropFocus: CENTER) {
+                    ...GatsbyImageSharpFluid_withWebp
+                    originalName
+                  }
+                  original {
+                    height
+                    width
                   }
                 }
               }

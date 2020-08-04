@@ -1,4 +1,4 @@
-const buildImage = image => ({
+const buildImage = (image) => ({
   '@context': 'http://schema.org/',
   '@type': 'ImageObject',
   url: image.url,
@@ -39,12 +39,7 @@ const webpageSchema = ({
     headline,
     url,
     description,
-    primaryImageOfPage: {
-      '@type': 'ImageObject',
-      url: image.url,
-      width: image.width,
-      height: image.height,
-    },
+    primaryImageOfPage: buildImage(image),
     author: {
       '@id': '#person',
     },
@@ -97,7 +92,7 @@ export const articleSchema = ({
   ])
 }
 
-export default function(data) {
+export default function (data) {
   const isPage = data.templateKey.indexOf('-page') !== -1
   const isArticle = data.templateKey.indexOf('-post') !== -1
   const isArchive = data.templateKey.indexOf('-archive') !== -1

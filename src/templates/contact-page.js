@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import { Layout, PreviewableImage } from '../components'
 import { featuredImagePropTypes } from '../proptypes'
+import { seoProps } from '../utils'
 
 export const ContactPageTemplate = ({
   header,
@@ -15,7 +16,9 @@ export const ContactPageTemplate = ({
 }) => {
   function encode(data) {
     return Object.keys(data)
-      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .map(
+        (key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]),
+      )
       .join('&')
   }
 
@@ -39,18 +42,18 @@ export const ContactPageTemplate = ({
     'large',
     sendStatus === 'working' ? 'disabled' : '',
   ]
-    .filter(item => item)
+    .filter((item) => item)
     .join(' ')
   const btnText = sendStatus === 'success' ? 'Success!' : formText.submit
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const vals = _.cloneDeep(values)
     const { name, type, value } = e.target
     vals[name] = type === 'checkbox' ? !vals[name] : value
     setValues(vals)
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (isPreview) {
       return null
@@ -65,11 +68,11 @@ export const ContactPageTemplate = ({
         ...values,
       }),
     })
-      .then(result => {
+      .then((result) => {
         const success = result && result.status && result.status === 200
         updateSendStatus(success ? 'success' : 'error')
       })
-      .catch(error => {
+      .catch((error) => {
         updateSendStatus(error)
       })
   }
@@ -101,7 +104,12 @@ export const ContactPageTemplate = ({
             {/* The `form-name` hidden field is required to support form submissions without JavaScript */}
             <input type="hidden" name="form-name" value="contact" />
             <div hidden>
-              <input name={botfield} onChange={handleChange} tabIndex="-1" />
+              <input
+                name={botfield}
+                onChange={handleChange}
+                tabIndex="-1"
+                aria-label={botfield}
+              />
             </div>
             <input
               className="input"
@@ -112,6 +120,7 @@ export const ContactPageTemplate = ({
               id={'name'}
               value={values.name}
               required={true}
+              aria-label={formText.name}
             />
             <input
               className="input"
@@ -122,6 +131,7 @@ export const ContactPageTemplate = ({
               id={'email'}
               value={values.email}
               required={true}
+              aria-label={formText.email}
             />
             <textarea
               className="textarea"
@@ -132,17 +142,8 @@ export const ContactPageTemplate = ({
               value={values.message}
               required={true}
               rows={4}
+              aria-label={formText.message}
             />
-            {/* <input
-              type="checkbox"
-              name="checkbox"
-              onChange={handleChange}
-              id={'checkbox'}
-              checked={!!values.checkbox}
-            />
-            <label htmlFor="checkbox" className="checkbox">
-              Here's a checkbox!
-            </label> */}
             <button className={btnClasses} type="submit">
               {btnText}
             </button>
@@ -158,17 +159,11 @@ export const ContactPageTemplate = ({
 
 const ContactPage = ({ data }) => {
   const {
-    templateKey,
-    pageTitle,
-    metaDescription,
-    schemaType,
     header,
     subheader,
     featuredImage,
     formText,
   } = data.markdownRemark.frontmatter
-  const { slug, gitAuthorTime, gitCreatedTime } = data.markdownRemark.fields
-
   const pageProps = {
     header,
     subheader,
@@ -176,19 +171,8 @@ const ContactPage = ({ data }) => {
     formText,
   }
 
-  const layoutProps = {
-    pageTitle,
-    metaDescription,
-    slug,
-    templateKey,
-    schemaType,
-    featuredImage,
-    gitAuthorTime,
-    gitCreatedTime,
-  }
-
   return (
-    <Layout {...layoutProps}>
+    <Layout seoProps={seoProps(data)}>
       <ContactPageTemplate {...pageProps} />
     </Layout>
   )
@@ -227,8 +211,13 @@ export const pageQuery = graphql`
         featuredImage {
           src {
             childImageSharp {
-              fluid(maxWidth: 1200, quality: 100) {
+              fluid(maxWidth: 1200, quality: 80, cropFocus: CENTER) {
                 ...GatsbyImageSharpFluid_withWebp
+                originalName
+              }
+              original {
+                height
+                width
               }
             }
           }

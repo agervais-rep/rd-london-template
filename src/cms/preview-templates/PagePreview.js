@@ -14,6 +14,10 @@ const PagePreview = ({ entry, getAsset, widgetFor }) => {
     alt: entry.getIn(['data', 'featuredImage', 'alt']) || '',
     caption: entry.getIn(['data', 'featuredImage', 'caption']) || '',
   }
+  const learnMoreButton = {
+    link: entry.getIn(['data', 'learnMoreButton', 'link']) || '/about/',
+    label: entry.getIn(['data', 'learnMoreButton', 'label']) || 'Read More',
+  }
   const longBiography_MD = toHTML(entry.getIn(['data', 'longBiography_MD']))
   const missionStatement = entry.getIn(['data', 'missionStatement']) || ''
   const shortBiography = entry.getIn(['data', 'shortBiography']) || ''
@@ -34,6 +38,7 @@ const PagePreview = ({ entry, getAsset, widgetFor }) => {
           missionStatement={missionStatement}
           shortBiography={shortBiography}
           featuredImage={featuredImage}
+          learnMoreButton={learnMoreButton}
           extraContent={extraContent}
           isPreview={true}
           recentPosts={[]}

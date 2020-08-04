@@ -1,5 +1,11 @@
 /* Layout */
 
+.in-view
+  opacity: 0
+  transition: opacity 0.3s ease-in
+  &.visible
+    opacity: 1
+
 .site-wrapper
   padding: 3vw
   min-height: 100vh
@@ -24,6 +30,10 @@
     margin: 0 0 1.6vw
     font-size: 2.2rem
     line-height: 1.35em
+
+.has-image
+  .page-head
+    padding-bottom: 0
 
 @media (max-width: 500px)
   .page-head

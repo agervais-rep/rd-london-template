@@ -10,9 +10,7 @@ const NavLink = ({ slug, name }) => {
   const linkClass = 'nav-' + name.replace(' ', '-').toLowerCase()
   return (
     <li className={linkClass}>
-      <Link to={slug} role="menuitem">
-        {name}
-      </Link>
+      <Link to={slug}>{name}</Link>
     </li>
   )
 }
@@ -46,18 +44,17 @@ const Nav = ({ toggleNav, setToggleNav, siteName }) => {
     { Pinterest: pinterest },
     { Instagram: instagram },
   ].filter(
-    item => !!Object.values(item)[0].url && !!Object.values(item)[0].show
+    (item) => !!Object.values(item)[0].url && !!Object.values(item)[0].show,
   )
 
   return (
     <Fragment>
-      <button className="nav-burger" onClick={() => setToggleNav(!toggleNav)}>
-        <div
-          className="hamburger hamburger--collapse"
-          aria-label="Menu"
-          role="button"
-          aria-controls="navigation"
-        >
+      <button
+        className="nav-burger"
+        onClick={() => setToggleNav(!toggleNav)}
+        aria-label="Open or close menu"
+      >
+        <div className="hamburger hamburger--collapse">
           <div className="hamburger-box">
             <div className="hamburger-inner" />
           </div>
@@ -67,7 +64,7 @@ const Nav = ({ toggleNav, setToggleNav, siteName }) => {
         <ul className="nav">
           {!!navPages &&
             navPages.length > 1 &&
-            navPages.map(page => (
+            navPages.map((page) => (
               <NavLink slug={page.slug} name={page.label} key={uuidv4()} />
             ))}
         </ul>
@@ -81,7 +78,7 @@ const Nav = ({ toggleNav, setToggleNav, siteName }) => {
         <div className="social-links">
           {!!socialLinks &&
             !!socialLinks.length &&
-            socialLinks.map(social => (
+            socialLinks.map((social) => (
               <SocialLink
                 slug={Object.values(social)[0].url}
                 name={Object.keys(social)[0]}

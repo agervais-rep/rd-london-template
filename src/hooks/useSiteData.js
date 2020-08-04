@@ -37,24 +37,22 @@ export default () => {
               fontScheme
               showThemeSwitcher
             }
-            favicon {
-              childImageSharp {
-                fixed(width: 32, height: 32, quality: 100, toFormat: PNG) {
-                  ...GatsbyImageSharpFixed
-                }
-              }
-            }
             fallbackImage {
               childImageSharp {
+                original {
+                  height
+                  width
+                }
                 fluid(maxWidth: 1440) {
                   ...GatsbyImageSharpFluid_withWebp
+                  originalName
                 }
               }
             }
           }
         }
       }
-    `
+    `,
   )
   return query.markdownRemark.frontmatter
 }

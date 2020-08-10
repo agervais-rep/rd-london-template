@@ -67,7 +67,7 @@ const PostCard = ({ count, image, slug, pageTitle, date }) => {
 }
 
 export const postPropTypes = {
-  count: PropTypes.number.isRequired,
+  count: PropTypes.number,
   image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   slug: PropTypes.string,
   pageTitle: PropTypes.string.isRequired,

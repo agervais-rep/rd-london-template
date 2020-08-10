@@ -71,7 +71,7 @@ const BlogArchive = ({ data }) => {
 BlogArchiveTemplate.propTypes = {
   header: PropTypes.string.isRequired,
   subheader: PropTypes.string,
-  posts: PropTypes.arrayOf(PropTypes.shape(postPropTypes)).isRequired,
+  posts: PropTypes.arrayOf(PropTypes.shape(postPropTypes)),
   featuredImage: featuredImagePropTypes,
   isPreview: PropTypes.bool,
 }

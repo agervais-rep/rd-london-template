@@ -5,6 +5,7 @@ name: '{{client_name}}'
 jobTitle: '{{job_title}}'
 siteName: '{{site_name}}'
 siteUrl: 'https://{{site_url}}'
+siteAnalytics: ~
 socialLinks:
   twitter:
     url: ''
@@ -21,7 +22,7 @@ socialLinks:
   instagram:
     url: ''
     show: false
-favicon: '/img/favicon-32x32.png'
+favicon: '/img/favicon.png'
 fallbackImage: '/img/headshot.jpg'
 themeOptions:
   colorScheme: 'londn'

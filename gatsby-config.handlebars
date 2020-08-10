@@ -66,6 +66,21 @@ module.exports = {
     'gatsby-plugin-loadable-components-ssr',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
+    {{#if siteAnalytics}}
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: {{siteAnalytics}},
+        head: false,
+        anonymize: false,
+        respectDNT: true,
+        pageTransitionDelay: 0,
+        sampleRate: 5,
+        siteSpeedSampleRate: 10,
+        cookieDomain: {{siteUrl}},
+      },
+    },
+    {{/if}}
     {
       resolve: `gatsby-plugin-sitemap`,
       options: {
@@ -168,7 +183,7 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#131313`,
         display: `standalone`,
-        icon: `static/img/favicon.png`, // This path is relative to the root of the site.
+        icon: `static{{favicon}}`, // This path is relative to the root of the site.
         cache_busting_mode: 'none',
         icon_options: {
           purpose: `maskable`,

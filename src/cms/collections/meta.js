@@ -1,6 +1,6 @@
 import { siteMetadata } from '../utils'
 
-const socialLink = label => ({
+const socialLink = (label) => ({
   label,
   name: label.toLowerCase(),
   widget: 'object',
@@ -65,6 +65,13 @@ const siteDataFields = [
     required: true,
     hint: 'The URL of your website. Must start with "https://".',
     pattern: ['https://.+', 'Must start with "https://"."'],
+  },
+  {
+    label: 'Google Analytics ID',
+    name: 'siteAnalytics',
+    widget: 'string',
+    required: false,
+    hint: 'If you use Google Analytics, insert your ID, e.g. UA-123456789-1',
   },
   {
     label: 'Favicon',

@@ -4,7 +4,11 @@ const moment = require('moment-timezone')
 const { execSync } = require('child_process')
 const { createFilePath } = require('gatsby-source-filesystem')
 const { fmImagesToRelative } = require('gatsby-remark-relative-images')
-const { transformFrontmatterMD, extractInlineImages } = require('./utils')
+const {
+  transformFrontmatterMD,
+  extractInlineImages,
+  addTrailingSlash,
+} = require('./utils')
 
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
@@ -88,7 +92,6 @@ exports.createSchemaCustomization = ({ actions }) => {
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
 
-  // const blogPost = path.resolve(`./src/templates/blog-post.js`)
   return graphql(`
     {
       allMarkdownRemark(
@@ -123,7 +126,7 @@ exports.createPages = ({ graphql, actions }) => {
     posts.forEach((edge) => {
       const id = edge.node.id
       createPage({
-        path: edge.node.fields.slug,
+        path: addTrailingSlash(edge.node.fields.slug),
         // tags: edge.node.frontmatter.tags,
         component: path.resolve(
           `src/templates/${String(edge.node.frontmatter.templateKey)}.js`,

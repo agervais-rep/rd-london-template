@@ -15,12 +15,15 @@ export const BlogPostTemplate = ({
   date,
   dateModified,
   content,
-  featuredImage: { src, alt, caption },
+  featuredImage,
   isPreview,
   inlineImages,
 }) => {
   const hasImg =
-    src && (src.childImageSharp || (typeof src === 'string' && src.length > 1))
+    featuredImage &&
+    featuredImage.src &&
+    (featuredImage.src.childImageSharp ||
+      (typeof featuredImage.src === 'string' && featuredImage.src.length > 1))
 
   return (
     <article
@@ -62,9 +65,9 @@ export const BlogPostTemplate = ({
           >
             <PreviewableImage
               isPreview={isPreview}
-              src={src}
-              alt={alt}
-              caption={caption}
+              src={featuredImage.src}
+              alt={featuredImage.alt}
+              caption={featuredImage.caption}
             />
           </figure>
         )}

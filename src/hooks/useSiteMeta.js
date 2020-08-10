@@ -14,12 +14,11 @@ export default () => {
             fontOptions {
               label
               value
-              styles
             }
           }
         }
       }
-    `
+    `,
   )
   return query.site.siteMetadata
 }

@@ -67,3 +67,13 @@ exports.extractInlineImages = (node) => {
     )
   })
 }
+
+exports.addTrailingSlash = (path) => {
+  if (path === '/') {
+    return path
+  }
+  return `/${path
+    .split('/')
+    .filter((x) => x)
+    .join('/')}/`
+}

@@ -44,7 +44,6 @@ const SEO = ({
     headline: pageTitle,
     description: metaDescription,
     url: `${siteUrl}${addTrailingSlash(slug)}`,
-    image: buildImage(image, siteUrl),
     fallbackImage: buildImage(fallbackImage, siteUrl),
     pageType:
       templateKey && templateKey.indexOf('blog-post') !== -1
@@ -60,6 +59,10 @@ const SEO = ({
       (item) => !!item && !!item.url && item.url.length,
     ),
   }
+
+  schemaData.image = !!image
+    ? buildImage(image, siteUrl)
+    : schemaData.fallbackImage
 
   const twitterHandle =
     twitter && twitter.url ? '@' + twitter.url.split('twitter.com/')[1] : null

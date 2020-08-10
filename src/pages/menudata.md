@@ -4,10 +4,10 @@ published: false
 menuItems:
   - slug: /
     label: Home
-  - slug: /about
+  - slug: /about/
     label: About
-  - slug: /blog
+  - slug: /blog/
     label: Blog
-  - slug: /contact
+  - slug: /contact/
     label: Contact
 ---

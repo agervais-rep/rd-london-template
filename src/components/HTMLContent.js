@@ -8,6 +8,9 @@ import { InView } from 'react-intersection-observer'
 function convertStyles(styleString) {
   const styles = styleString.split(';').filter((i) => i)
   const output = {}
+  if (!styles.length) {
+    return output
+  }
   styles.forEach((style) => {
     const [name, value] = style.split(':').map((s) => s.trim())
     const jsName = name
@@ -23,6 +26,9 @@ function convertStyles(styleString) {
 
 function attribsToProps(attribs) {
   const props = { style: {} }
+  if (typeof attribs !== 'object') {
+    return props
+  }
   Object.keys(attribs).forEach((key) => {
     if (key === 'style') {
       const styles = convertStyles(attribs.style)
@@ -44,6 +50,14 @@ function parseImg(attribs, images) {
   props.style.width = childImg.childImageSharp.fluid.presentationWidth + 'px'
   if (!props.style.maxWidth) {
     props.style.maxWidth = '100%'
+  }
+  Object.keys(props).forEach((key) => {
+    if (!['className', 'alt', 'style'].includes(key)) {
+      delete props[key]
+    }
+  })
+  if (!props.alt) {
+    props.alt = childImg.childImageSharp.fluid.originalName
   }
   return <Img {...props} Tag="span" fluid={childImg.childImageSharp.fluid} />
 }
@@ -70,6 +84,7 @@ function parseIframe(attribs) {
 
 export const HTMLContent = ({ content, className, style, inlineImages }) => {
   const nodes = parse(content, {
+    trim: true,
     replace: ({ name, attribs }) => {
       //lazyload iframes
       if (name === 'iframe') {
@@ -78,11 +93,13 @@ export const HTMLContent = ({ content, className, style, inlineImages }) => {
       // process images, only jpg and png
       if (
         name === 'img' &&
+        (!('class' in attribs) || attribs['class'].indexOf('gatsby-') === -1) &&
         attribs.src &&
         (attribs.src.indexOf('.jpg') !== -1 ||
           attribs.src.indexOf('.png') !== -1) &&
-        inlineImages &&
-        inlineImages.length
+        !!inlineImages &&
+        !!inlineImages.length &&
+        !inlineImages.includes(null)
       ) {
         return parseImg(attribs, inlineImages)
       }
@@ -92,7 +109,7 @@ export const HTMLContent = ({ content, className, style, inlineImages }) => {
   return !!className || !!style ? (
     <div
       className={!!className ? className : undefined}
-      style={!!style && Object.keys(style).length ? style : undefined}
+      style={!!style && !!Object.keys(style).length ? style : undefined}
     >
       {nodes}
     </div>

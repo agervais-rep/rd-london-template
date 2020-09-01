@@ -66,7 +66,7 @@ const ThemeSwitcher = ({
         <label htmlFor="theme-preview-colors">Color Scheme</label>
         <select
           id="theme-preview-colors"
-          onChange={e => {
+          onChange={(e) => {
             setColorScheme(e.target.value)
           }}
           value={colorScheme}
@@ -80,7 +80,7 @@ const ThemeSwitcher = ({
         <label htmlFor="theme-preview-fonts">Font Scheme</label>
         <select
           id="theme-preview-fonts"
-          onChange={e => {
+          onChange={(e) => {
             setFontScheme(e.target.value)
           }}
           value={fontScheme}
@@ -98,6 +98,11 @@ const ThemeSwitcher = ({
 
 ThemeSwitcher.propTypes = {
   colorScheme: PropTypes.string.isRequired,
+  setColorScheme: PropTypes.func.isRequired,
+  fontScheme: PropTypes.string.isRequired,
+  setFontScheme: PropTypes.func.isRequired,
+  previewOpen: PropTypes.bool.isRequired,
+  setPreviewOpen: PropTypes.func.isRequired,
 }
 
 export default ThemeSwitcher

@@ -1,5 +1,14 @@
 import moment from 'moment'
 
+export function isValidRGBA(input) {
+  const regex = new RegExp(
+    /rgba\(\s*[0-9]{1,3},\s*[0-9]{1,3},\s*[0-9]{1,3},\s*[0-1]{1}(\.[0-9]+)?\s*\)/g,
+  )
+  if (!input || typeof input !== 'string') return false
+  const result = input.match(regex)
+  return result !== null && Array.isArray(result) && !!result.length
+}
+
 export function seoProps(data) {
   const {
     fields: { slug, gitAuthorTime, gitCreatedTime },
@@ -22,7 +31,9 @@ export function seoProps(data) {
   return {
     pageTitle,
     metaDescription,
-    featuredImage,
+    // null out the featured image if empty to prevent erroneous proptype warnings
+    featuredImage:
+      !!featuredImage && !!featuredImage.src ? featuredImage : null,
     slug,
     date,
     dateModified,

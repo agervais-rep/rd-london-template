@@ -25,14 +25,16 @@ export const BlogArchiveTemplate = ({
         {!!subheader && <p className="page-head-description">{subheader}</p>}
       </header>
       <section className="post-content-body">
-        <figure className="gatsby-resp-image-card-full">
-          <PreviewableImage
-            isPreview={isPreview}
-            src={src}
-            alt={alt}
-            caption={caption}
-          />
-        </figure>
+        {!!src && !!alt && (
+          <figure className="gatsby-resp-image-card-full">
+            <PreviewableImage
+              isPreview={isPreview}
+              src={src}
+              alt={alt}
+              caption={caption}
+            />
+          </figure>
+        )}
       </section>
     </div>
     <PostFeed isPreview={isPreview} posts={posts} />

@@ -1,5 +1,3 @@
-const path = require('path')
-
 module.exports = {
   siteMetadata: {
     title: 'Gatsby London',
@@ -156,7 +154,19 @@ module.exports = {
           /^blockquote$/,
           /^gatsby-resp-image/,
         ],
-        whitelistPatternsChildren: [/^gatsby-image-wrapper/, /^in-view$/],
+        whitelistPatternsChildren: [
+          /^gatsby-image-wrapper/,
+          /^in-view$/,
+          /^londn$/,
+          /^sand$/,
+          /^coral$/,
+          /^sun$/,
+          /^muli$/,
+          /^lora$/,
+          /^proza$/,
+          /^rubik$/,
+          /^popp$/,
+        ],
       },
     }, // must be after other CSS plugins
     {

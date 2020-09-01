@@ -2,7 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import PostCard from './PostCard'
 import { v4 as uuidv4 } from 'uuid'
+import moment from 'moment'
 import { addTrailingSlash } from '../utils'
+import { featuredImagePropTypes } from '../proptypes'
+
+const Moment = moment().constructor
 
 const PostFeed = ({ isPreview, posts }) => (
   <div className="post-feed">
@@ -38,7 +42,14 @@ const PostFeed = ({ isPreview, posts }) => (
 
 PostFeed.propTypes = {
   isPreview: PropTypes.bool,
-  posts: PropTypes.array,
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: featuredImagePropTypes,
+      slug: PropTypes.string,
+      pageTitle: PropTypes.string.isRequired,
+      date: PropTypes.instanceOf(Moment),
+    }),
+  ),
 }
 
 export default PostFeed

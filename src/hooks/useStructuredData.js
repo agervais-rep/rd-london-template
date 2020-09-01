@@ -51,7 +51,7 @@ const webpageSchema = ({
   return JSON.stringify([personSchema({ name, jobTitle, sameAs }), pageSchema])
 }
 
-export const articleSchema = ({
+const articleSchema = ({
   headline,
   url,
   description,

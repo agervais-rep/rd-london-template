@@ -44,7 +44,10 @@ const Nav = ({ toggleNav, setToggleNav, siteName }) => {
     { Pinterest: pinterest },
     { Instagram: instagram },
   ].filter(
-    (item) => !!Object.values(item)[0].url && !!Object.values(item)[0].show,
+    (item) =>
+      !!Object.values(item)[0] &&
+      !!Object.values(item)[0].url &&
+      !!Object.values(item)[0].show,
   )
 
   return (

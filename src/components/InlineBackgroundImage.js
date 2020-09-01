@@ -1,6 +1,7 @@
 import React from 'react'
 import Img from 'gatsby-image'
 import PropTypes from 'prop-types'
+import { isValidRGBA } from '../utils'
 
 const InlineBackgroundImage = ({
   extraClasses,
@@ -67,7 +68,11 @@ const InlineBackgroundImage = ({
         {image}
         <div
           className="is-overlay"
-          style={{ backgroundColor: overlayColor || 'rgba(0,0,0,0.65)' }}
+          style={{
+            backgroundColor: isValidRGBA(overlayColor)
+              ? overlayColor
+              : 'rgba(0,0,0,0.65)',
+          }}
         />
       </div>
       <div
@@ -94,7 +99,7 @@ InlineBackgroundImage.propTypes = {
   alt: PropTypes.string.isRequired,
   styles: PropTypes.object,
   overlayColor: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 }
 
 export default InlineBackgroundImage

@@ -1,4 +1,4 @@
-import { siteMetadata } from '../utils'
+import { siteMetadata } from '../../../gatsby-config'
 
 const socialLink = (label) => ({
   label,

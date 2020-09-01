@@ -1,8 +1,10 @@
 import React, { Fragment, useState, useContext } from 'react'
 import { Link } from 'gatsby'
 import { Helmet } from 'react-helmet'
-import { Nav, ThemeSwitcher } from '../components'
-import { useSiteData, useSiteMeta } from '../hooks'
+import Fonts from '../components/Fonts'
+import Nav from '../components/Nav'
+import ThemeSwitcher from '../components/ThemeSwitcher'
+import { useSiteData } from '../hooks'
 import { ThemeOptionsContext } from '../context/ThemeOptions'
 import '../style/all.sass'
 
@@ -12,33 +14,20 @@ const NotFoundPage = () => {
     name,
     favicon,
     siteName,
-    themeOptions: { showThemeSwitcher },
+    themeOptions: { showThemeSwitcher, fontScheme: ssrFontScheme },
   } = useSiteData()
   const { colorScheme, setColorScheme, fontScheme, setFontScheme } = useContext(
-    ThemeOptionsContext
+    ThemeOptionsContext,
   )
-
-  const { fontOptions } = useSiteMeta()
-
-  const buildFonts = fontname => {
-    const fontData = fontOptions.filter(item => item.value === fontname)
-    return fontData && fontData.length
-      ? fontData[0].styles
-      : fontOptions[0].styles
-  }
 
   return (
     <Fragment>
+      <Fonts
+        fontScheme={typeof window === 'undefined' ? ssrFontScheme : fontScheme}
+      />
       <Helmet bodyAttributes={{ class: 'frontend' }}>
         <html lang="en" className={`${colorScheme} ${fontScheme}`} />
         <title>Page Not Found</title>
-        <link
-          rel="stylesheet"
-          href={`https://fonts.googleapis.com/css2?${buildFonts(
-            fontScheme
-          )}&display=swap`}
-          key="fonts"
-        />
         <meta name="robots" content="no-index, no-follow" />
         <meta
           name="description"
@@ -53,6 +42,7 @@ const NotFoundPage = () => {
           />
         )}
       </Helmet>
+
       <div className={`site-wrapper ${toggleNav ? `site-head-open` : ``}`}>
         <header className="site-head">
           <div className="site-head-container">

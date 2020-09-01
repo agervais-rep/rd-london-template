@@ -125,12 +125,14 @@ exports.createPages = ({ graphql, actions }) => {
 
     posts.forEach((edge) => {
       const id = edge.node.id
+      const template =
+        edge.node.frontmatter.templateKey.indexOf('-page') !== -1
+          ? 'page'
+          : edge.node.frontmatter.templateKey
       createPage({
         path: addTrailingSlash(edge.node.fields.slug),
         // tags: edge.node.frontmatter.tags,
-        component: path.resolve(
-          `src/templates/${String(edge.node.frontmatter.templateKey)}.js`,
-        ),
+        component: path.resolve(`src/templates/${String(template)}.js`),
         // additional data can be passed via context
         context: {
           id,

@@ -4,6 +4,7 @@ import { Link } from 'gatsby'
 import { useInView } from 'react-intersection-observer'
 import moment from 'moment'
 import InlineBackgroundImage from './InlineBackgroundImage'
+import { featuredImagePropTypes } from '../proptypes'
 
 const Moment = moment().constructor
 
@@ -14,7 +15,7 @@ const PostCard = ({ count, image, slug, pageTitle, date }) => {
     'post',
     'post-card',
     isLarge ? `post-card-large` : null,
-    image ? `with-image` : `no-image`,
+    !!image ? `with-image` : `no-image`,
     inView ? 'in-view visible' : 'in-view',
   ]
     .filter((x) => x)
@@ -67,8 +68,8 @@ const PostCard = ({ count, image, slug, pageTitle, date }) => {
 }
 
 export const postPropTypes = {
-  count: PropTypes.number,
-  image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  count: PropTypes.number.isRequired,
+  image: featuredImagePropTypes,
   slug: PropTypes.string,
   pageTitle: PropTypes.string.isRequired,
   date: PropTypes.instanceOf(Moment),

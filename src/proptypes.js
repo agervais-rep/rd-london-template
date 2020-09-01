@@ -16,6 +16,9 @@ export const featuredImagePropTypes = PropTypes.shape({
   m: PropTypes.shape({
     childImageSharp: PropTypes.object.isRequired,
   }),
-  alt: PropTypes.string,
+  square: PropTypes.shape({
+    childImageSharp: PropTypes.object.isRequired,
+  }),
+  alt: PropTypes.string.isRequired,
   caption: PropTypes.string,
 })

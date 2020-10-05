@@ -32,7 +32,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       metaDescription: String!
       header: String!
       subheader: String
-      date: Date @dateformat(formatString: "MMM D, YYYY")
+      date: Date @dateformat(formatString: "YYYY-MM-DDTHH:mm:ss.SSS")
       featuredImage: FeaturedImage
       missionStatement: String
       shortBiography: String

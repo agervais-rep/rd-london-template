@@ -10,36 +10,46 @@ export const BlogArchiveTemplate = ({
   header,
   subheader,
   posts,
-  featuredImage: { src, alt, caption },
+  featuredImage,
   isPreview,
-}) => (
-  <Fragment>
-    <div
-      className={`post-content page-template ${
-        !!src ? 'with-image' : 'no-image'
-      }`}
-      style={{ padding: 0 }}
-    >
-      <header className="page-head">
-        <h1 className="page-head-title">{header}</h1>
-        {!!subheader && <p className="page-head-description">{subheader}</p>}
-      </header>
-      <section className="post-content-body">
-        {!!src && !!alt && (
-          <figure className="gatsby-resp-image-card-full">
-            <PreviewableImage
-              isPreview={isPreview}
-              src={src}
-              alt={alt}
-              caption={caption}
-            />
-          </figure>
-        )}
-      </section>
-    </div>
-    <PostFeed isPreview={isPreview} posts={posts} />
-  </Fragment>
-)
+}) => {
+  const hasFeaturedImage = !!featuredImage && !!featuredImage.src
+  return (
+    <Fragment>
+      <div
+        className={`post-content page-template ${
+          hasFeaturedImage ? 'with-image' : 'no-image'
+        }`}
+        style={{ padding: 0 }}
+      >
+        <header className="page-head">
+          <h1 className="page-head-title">{header}</h1>
+          {!!subheader && <p className="page-head-description">{subheader}</p>}
+        </header>
+        <section className="post-content-body">
+          {hasFeaturedImage && (
+            <figure
+              className="gatsby-resp-image-card-full"
+              style={{ marginBottom: '1rem' }}
+            >
+              <PreviewableImage
+                isPreview={isPreview}
+                src={
+                  isPreview
+                    ? featuredImage.src
+                    : { m: featuredImage.m, d: featuredImage.d }
+                }
+                alt={featuredImage.alt}
+                caption={featuredImage.caption}
+              />
+            </figure>
+          )}
+        </section>
+      </div>
+      <PostFeed isPreview={isPreview} posts={posts} />
+    </Fragment>
+  )
+}
 
 const BlogArchive = ({ data }) => {
   const { header, subheader, featuredImage } = data.markdownRemark.frontmatter
@@ -98,8 +108,53 @@ export const pageQuery = graphql`
         featuredImage {
           src {
             childImageSharp {
-              fluid(maxWidth: 1200, quality: 80, cropFocus: CENTER) {
+              fluid {
+                originalName
+              }
+              original {
+                height
+                width
+              }
+            }
+          }
+          d: src {
+            childImageSharp {
+              fluid(
+                maxWidth: 1200
+                maxHeight: 450
+                quality: 80
+                cropFocus: CENTER
+              ) {
                 ...GatsbyImageSharpFluid_withWebp
+              }
+            }
+          }
+          m: src {
+            childImageSharp {
+              fluid(
+                maxWidth: 900
+                maxHeight: 506
+                quality: 80
+                cropFocus: CENTER
+              ) {
+                ...GatsbyImageSharpFluid_withWebp
+              }
+            }
+          }
+          square: src {
+            childImageSharp {
+              fluid(
+                maxWidth: 420
+                maxHeight: 360
+                quality: 80
+                cropFocus: CENTER
+              ) {
+                ...GatsbyImageSharpFluid_withWebp
+                originalName
+              }
+              original {
+                height
+                width
               }
             }
           }
